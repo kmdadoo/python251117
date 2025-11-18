@@ -1,0 +1,69 @@
+c:\> mysql -u root -p mysql;
+
+mysql> SHOW DATABASES;
+
+mysql> CREATE DATABASE sample_db;
+
+mysql> SHOW DATABASES;
+
+mysql> use sample_db;
+
+mysql> CREATE USER 'sample_user'@'localhost' IDENTIFIED BY '1234';
+
+mysql> GRANT ALL PRIVILEGES ON sample_db.* TO  'sample_user'@'localhost';
+
+mysql> FLUSH PRIVILEGES;
+
+#회원테이블(부모)
+mysql> CREATE TABLE member
+    -> (
+    ->    id VARCHAR(30) NOT NULL,
+    ->    pass VARCHAR(30) NOT NULL,
+    ->    name VARCHAR(30) NOT NULL,  
+    ->    regidate datetime DEFAULT CURRENT_TIMESTAMP,  
+    ->    PRIMARY KEY (id)
+    -> );
+
+#게시판테이블(자식)
+mysql> CREATE TABLE board
+    -> (
+    ->    num INT NOT NULL AUTO_INCREMENT,
+    ->    title VARCHAR(100) NOT NULL,   
+    ->    content TEXT NOT NULL,
+    ->    id VARCHAR(30) NOT NULL,   
+    ->    postdate DATETIME DEFAULT current_timestamp, 
+    ->    visitcount MEDIUMINT NOT NULL DEFAULT 0,
+    ->    PRIMARY KEY (num)
+    -> );
+
+#외래키 설정
+mysql> ALTER TABLE board ADD constraint fk_board_member
+    ->    FOREIGN KEY (id) REFERENCES member (id);
+
+#더미데이터 삽입
+mysql> INSERT INTO member (id, pass, NAME) VALUES 
+    ->    ('korea', '1234', '대한민국');
+
+#부모테이블인 member에 먼저 삽입한 후 자식테이블인 board에 삽입한다. 
+mysql> INSERT INTO board (title, content, id)
+   VALUES ('제목입니다1', '내용입니다1', 'korea');
+mysql> INSERT INTO board (title, content, id)
+   VALUES ('제목입니다2', '내용입니다2', 'korea');
+mysql> INSERT INTO board (title, content, id)
+   VALUES ('제목입니다3', '내용입니다3', 'korea');
+mysql> INSERT INTO board (title, content, id)
+   VALUES ('제목입니다4', '내용입니다4', 'korea');
+mysql> INSERT INTO board (title, content, id)
+   VALUES ('제목입니다5', '내용입니다5', 'korea');
+
+
+#전체 데이터 확인하기
+mysql> SELECT * FROM member;
+mysql> SELECT * FROM board;
+
+
+
+mysql 직접 하거나
+프롬프트 창에서 18sql.sql 명령어 직접 넣어서 하기
+
+18
